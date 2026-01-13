@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B站视频过滤器</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z" />
+          <path d="M2 17l10 5 10-5" />
+          <path d="M2 12l10 5 10-5" />
+        </svg>
+      </div>
+      <div class="header-text">
+        <h1>B站过滤器</h1>
+        <p>让首页更清净</p>
+      </div>
+      <label class="master-toggle">
+        <input type="checkbox" id="enableToggle" checked>
+        <span class="toggle-track">
+          <span class="toggle-thumb"></span>
+        </span>
+      </label>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat">
+        <span class="stat-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
+            <line x1="12" y1="2" x2="12" y2="12" />
+          </svg>
+        </span>
+        <span class="stat-value" id="blockedCount">0</span>
+        <span class="stat-label">已过滤</span>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="keywords">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <path d="M21 21l-4.35-4.35" />
+        </svg>
+        <span>关键词</span>
+      </button>
+      <button class="tab" data-tab="uploader">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span>UP主</span>
+      </button>
+      <button class="tab" data-tab="duration">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+        <span>时长</span>
+      </button>
+      <button class="tab" data-tab="views">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <span>播放量</span>
+      </button>
+    </nav>
+
+    <!-- Panels -->
+    <main class="panels">
+      <!-- Keywords Panel -->
+      <section class="panel active" id="keywordsPanel">
+        <div class="input-group">
+          <input type="text" id="keywordInput" placeholder="输入关键词，按回车添加" />
+          <button id="addKeywordBtn" class="btn-add">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </button>
+        </div>
+        <div class="tags-container">
+          <div class="tags-header">
+            <span class="tags-title">屏蔽列表</span>
+            <span class="tags-count" id="keywordCount">0</span>
+          </div>
+          <div class="tags-list" id="keywordList">
+            <div class="empty-state">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="11" cy="11" r="8" />
+                <path d="M21 21l-4.35-4.35" />
+              </svg>
+              <p>添加关键词来屏蔽视频</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Uploader Panel -->
+      <section class="panel" id="uploaderPanel">
+        <div class="input-group">
+          <input type="text" id="uploaderInput" placeholder="输入UP主名称，按回车添加" />
+          <button id="addUploaderBtn" class="btn-add">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </button>
+        </div>
+        <div class="tags-container">
+          <div class="tags-header">
+            <span class="tags-title">屏蔽列表</span>
+            <span class="tags-count" id="uploaderCount">0</span>
+          </div>
+          <div class="tags-list" id="uploaderList">
+            <div class="empty-state">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              <p>添加UP主名称来屏蔽</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Duration Panel -->
+      <section class="panel" id="durationPanel">
+        <div class="filter-card">
+          <div class="filter-header">
+            <span class="filter-title">时长过滤</span>
+            <label class="mini-toggle">
+              <input type="checkbox" id="durationEnabled">
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+          </div>
+
+          <div class="filter-body">
+            <div class="range-input">
+              <label>最短</label>
+              <div class="time-inputs">
+                <input type="number" id="minMinutes" min="0" max="999" value="0">
+                <span>分</span>
+                <input type="number" id="minSeconds" min="0" max="59" value="0">
+                <span>秒</span>
+              </div>
+            </div>
+            <div class="range-input">
+              <label>最长</label>
+              <div class="time-inputs">
+                <input type="number" id="maxMinutes" min="0" max="999" value="0">
+                <span>分</span>
+                <input type="number" id="maxSeconds" min="0" max="59" value="0">
+                <span>秒</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="presets">
+            <button class="preset" data-min="60" data-max="0">≥1分钟</button>
+            <button class="preset" data-min="180" data-max="0">≥3分钟</button>
+            <button class="preset" data-min="0" data-max="600">≤10分钟</button>
+            <button class="preset" data-min="60" data-max="1800">1-30分</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Views Panel -->
+      <section class="panel" id="viewsPanel">
+        <div class="filter-card">
+          <div class="filter-header">
+            <span class="filter-title">播放量过滤</span>
+            <label class="mini-toggle">
+              <input type="checkbox" id="viewsEnabled">
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+          </div>
+
+          <div class="filter-body">
+            <div class="range-input">
+              <label>最低</label>
+              <div class="views-input">
+                <input type="number" id="minViews" min="0" value="0">
+                <span>次</span>
+              </div>
+            </div>
+            <div class="range-input">
+              <label>最高</label>
+              <div class="views-input">
+                <input type="number" id="maxViews" min="0" value="0">
+                <span>次</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="presets">
+            <button class="preset views-preset" data-min="10000" data-max="0">≥1万</button>
+            <button class="preset views-preset" data-min="50000" data-max="0">≥5万</button>
+            <button class="preset views-preset" data-min="100000" data-max="0">≥10万</button>
+            <button class="preset views-preset" data-min="0" data-max="1000000">≤100万</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <button id="clearAllBtn" class="btn-clear">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6" />
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        </svg>
+        <span>清空设置</span>
+      </button>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
