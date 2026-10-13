@@ -1,0 +1,39 @@
+/* B站视频过滤器 - 页面内样式（作用于 B站 DOM，统一使用 bf- 前缀） */
+
+html:not(.bf-preview) .bf-hidden {
+  display: none !important;
+}
+
+/* 预览模式：被过滤的卡片半透明显示，并标出原因 */
+html.bf-preview .bf-hidden {
+  position: relative !important;
+}
+
+html.bf-preview .bf-hidden > * {
+  opacity: 0.28;
+  filter: grayscale(1);
+  transition: opacity 0.15s ease, filter 0.15s ease;
+}
+
+html.bf-preview .bf-hidden:hover > * {
+  opacity: 0.75;
+  filter: none;
+}
+
+html.bf-preview .bf-hidden::after {
+  content: attr(data-bf-reason);
+  position: absolute;
+  top: 8px;
+  left: 46px; /* 给左上角的悬停屏蔽按钮留出位置 */
+  z-index: 5;
+  max-width: calc(100% - 54px);
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(24, 25, 28, 0.82);
+  color: #fff;
+  font: 500 12px/18px -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}

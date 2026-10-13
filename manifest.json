@@ -1,14 +1,15 @@
 {
   "manifest_version": 3,
   "name": "B站视频过滤器",
-  "version": "1.0.0",
-  "description": "屏蔽B站上包含特定关键词的视频",
-  "permissions": ["storage", "activeTab"],
+  "version": "2.0.0",
+  "description": "按关键词、UP主、时长、播放量过滤 B站视频，悬停封面一键屏蔽，可隐藏广告与直播推荐",
+  "permissions": ["storage"],
   "host_permissions": ["*://*.bilibili.com/*"],
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "src/popup/popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     }
@@ -16,13 +17,15 @@
   "content_scripts": [
     {
       "matches": ["*://*.bilibili.com/*"],
-      "js": ["content.js"],
-      "css": ["content.css"],
-      "run_at": "document_idle"
+      "exclude_matches": ["*://live.bilibili.com/*", "*://message.bilibili.com/*", "*://member.bilibili.com/*", "*://passport.bilibili.com/*"],
+      "js": ["src/shared/core.js", "src/shared/store.js", "src/content/extract.js", "src/content/main.js"],
+      "css": ["src/content/content.css"],
+      "run_at": "document_start"
     }
   ],
   "icons": {
     "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   }
