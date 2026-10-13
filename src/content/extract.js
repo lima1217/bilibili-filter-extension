@@ -72,6 +72,8 @@
       // 首页番剧 / 国创 / 课堂 / 直播 等楼层卡片
       name: 'floor-single-card',
       selector: '.floor-single-card',
+      // 首页无限加载的锚点里也放了一张楼层骨架卡，隐藏它会导致无法继续加载
+      skip: function (el) { return !!el.closest('.load-more-anchor'); },
       container: function (el) { return el.closest('.feed-card') || el; },
       fields: { title: '.title, .floor-title' },
       kind: function (el) { return LIVE_HREF.test(firstHref(el, /./)) ? 'live' : 'nonVideo'; }
