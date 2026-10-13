@@ -88,7 +88,7 @@ button {
   display: grid;
   place-items: center;
   color: #fff;
-  background: linear-gradient(135deg, #ff8cb0, var(--brand));
+  background: linear-gradient(135deg, #ff9dbb, #f2588a);
   box-shadow: 0 4px 10px rgba(251, 114, 153, 0.3);
   transition: filter 0.2s;
 }
